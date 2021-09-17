@@ -4,9 +4,8 @@ from flask import jsonify
 import psycopg2
 import os
 
-database = os.environ.get('DATABASE_URL', 'database')
+database = os.environ.get('DATABASE_UR', 'database')
 
-print(os.environ['DATABASE_URL'] if 'DATABASE_URL' in os.environ['DATABASE_URL'] else 'database')
 conn = psycopg2.connect(
     host=database,
     database="td_1",
