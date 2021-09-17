@@ -1,9 +1,23 @@
 
 version: '3.8'
 services:
+  database:
+    container_name: "archi-cloud-database"
+    image: postgres:13.4
+    environment:
+      - POSTGRES_PASSWORD=dev_password
+      - POSTGRES_USER=si5_sacc
+      - POSTGRES_DB=td_1
+    expose:
+      - 5432
+    ports:
+      - 5432:5432  
+
   api:
     build: ./Server
     container_name: "archi-cloud-server"
+    depends_on: 
+      - database
     ports:
       - 5000:5000  
     restart: always

@@ -1,8 +1,28 @@
 from flask import Flask
+from flask import request
+from flask import jsonify
+import psycopg2
 
+conn = psycopg2.connect(
+    host="database",
+    port=5432,
+    database="td_1",
+    user="si5_sacc",
+    password="dev_password")
+
+# create a cursor
+cur = conn.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS visits (ip VARCHAR);")
+cur.close()
 app = Flask(__name__)
 
 
 @app.route('/')
 def hello():
-    return 'Hello, World!'
+    cur = conn.cursor()
+    cur.execute("INSERT INTO visits VALUES('"+str(request.remote_addr)+"')")
+    cur.execute('SELECT count(ip)  FROM visits')
+    count = str(cur.fetchone())
+    count = count[1:count.find(',')]
+    cur.close()
+    return "Hello, World! The total vist number is now "+ count + "."
