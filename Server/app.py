@@ -1,15 +1,37 @@
 from flask import Flask
 from flask import request
-from flask import jsonify
 import psycopg2
+import urllib.parse as urlparse
+import os
 
-conn = psycopg2.connect(
-    host="database",
-    port=5432,
-    database="td_1",
-    user="si5_sacc",
-    password="dev_password")
+DEFAULT_DATABASE = 'database'
 
+database = os.environ.get('DATABASE_URL', DEFAULT_DATABASE)
+
+if database == DEFAULT_DATABASE:
+    conn = psycopg2.connect(
+            host=database,
+            database="td_1",
+            user="si5_sacc",
+            password="dev_password")
+            
+else:
+    
+    url = urlparse.urlparse(database)
+    dbname = url.path[1:]
+    user = url.username
+    password = url.password
+    host = url.hostname
+    port = url.port
+
+
+    conn = psycopg2.connect(
+                dbname=dbname,
+                user=user,
+                password=password,
+                host=host,
+                port=port
+                )
 # create a cursor
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS visits (ip VARCHAR);")
