@@ -1,16 +1,36 @@
 from flask import Flask
 from flask import request
-from flask import jsonify
 import psycopg2
+import urllib.parse as urlparse
 import os
 
-database = os.environ.get('DATABASE_URL', 'database')
+DEFAULT_DATABASE = 'database'
 
-conn = psycopg2.connect(
-    host=database,
-    database="td_1",
-    user="si5_sacc",
-    password="dev_password")
+database = os.environ.get('DATABASE_URL', DEFAULT_DATABASE)
+
+if database == DEFAULT_DATABASE:
+        
+    url = urlparse.urlparse(database)
+    dbname = url.path[1:]
+    user = url.username
+    password = url.password
+    host = url.hostname
+    port = url.port
+
+
+    conn = psycopg2.connect(
+                dbname=dbname,
+                user=user,
+                password=password,
+                host=host,
+                port=port
+                )
+else:
+    conn = psycopg2.connect(
+        host=database,
+        database="td_1",
+        user="si5_sacc",
+        password="dev_password")
 
 # create a cursor
 cur = conn.cursor()
