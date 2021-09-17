@@ -9,7 +9,14 @@ DEFAULT_DATABASE = 'database'
 database = os.environ.get('DATABASE_URL', DEFAULT_DATABASE)
 
 if database == DEFAULT_DATABASE:
-        
+    conn = psycopg2.connect(
+            host=database,
+            database="td_1",
+            user="si5_sacc",
+            password="dev_password")
+            
+else:
+    
     url = urlparse.urlparse(database)
     dbname = url.path[1:]
     user = url.username
@@ -25,13 +32,6 @@ if database == DEFAULT_DATABASE:
                 host=host,
                 port=port
                 )
-else:
-    conn = psycopg2.connect(
-        host=database,
-        database="td_1",
-        user="si5_sacc",
-        password="dev_password")
-
 # create a cursor
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS visits (ip VARCHAR);")
