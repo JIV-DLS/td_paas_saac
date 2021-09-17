@@ -2,9 +2,11 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 import psycopg2
+import os
 
+print(os.environ['DATABASE_URL'] if 'DATABASE_URL' in os.environ['DATABASE_URL'] else 'database')
 conn = psycopg2.connect(
-    host="database",
+    host=os.environ['DATABASE_URL'] if 'DATABASE_URL' in os.environ['DATABASE_URL'] else 'database',
     port=5432,
     database="td_1",
     user="si5_sacc",
