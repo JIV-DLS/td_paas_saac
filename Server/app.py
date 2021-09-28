@@ -38,7 +38,6 @@ cur.execute("CREATE TABLE IF NOT EXISTS visits (ip VARCHAR);")
 cur.close()
 app = Flask(__name__)
 
-
 @app.route('/')
 def hello():
     cur = conn.cursor()
